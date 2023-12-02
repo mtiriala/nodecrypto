@@ -20,7 +20,10 @@ pipeline {
     
         stage('Install Frontend Dependencies') {
             steps {
-                sh 'npm install --prefix front_proj_sec1-main'
+            cd front_proj_sec1-main
+            rm -rf node_modules    
+            npm cache clean --force 
+            npm install              
                 
             }
         }
