@@ -45,7 +45,7 @@ pipeline {
                     def privateKey = env.SSH_PRIVATE_KEY
 
                     // Write private key to a temporary file
-                    def sshKeyFile = writeFile file: 'temp_ssh_key', text: privateKey
+                    def sshKeyFile = writeFile file: 'temp_ssh_key', text: privateKey.trim()
                     sh "chmod 600 ${sshKeyFile}"
 
                     // Copy files to EC2 using SSH key
