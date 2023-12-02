@@ -1,9 +1,8 @@
 pipeline {
     agent any
   environment {
-        REMOTE_HOST = '50.16.85.89'
-        REMOTE_USER = 'ec2-user'
-        SSH_CREDENTIALS = credentials('YOUR_SSH_CREDENTIALS_ID')
+    REMOTE_HOST = '50.16.85.89'  // Name of the SSH server you configured in Jenkins
+    REMOTE_USER = 'ec2-user'          // Name of the credential you added in Jenkins
 
     }
     stages {
@@ -39,28 +38,23 @@ pipeline {
         //     }
         // }
 
-        stage('Deploy to EC2') {
+      stage('Deploy to EC2') {
             steps {
                 script {
-                    def privateKey = env.SSH_PRIVATE_KEY
-                    // Write private key to a temporary file
-                    def sshKeyFile = writeFile file: 'temp_ssh_key', text: privateKey.trim()
-                    sh "ls"
-                    sh "cat temp_ssh_key"
-                    sh "chmod 600 ${sshKeyFile}"
-
-                    // Copy files to EC2 using SSH key
+                    // Copy files to EC2 using SSH
                     sshCommand remote: [
-                        host: REMOTE_HOST,
-                        user: REMOTE_USER,
-                        keyFile: sshKeyFile,
-                    ], command: "scp -i ${sshKeyFile} -r ./* ${REMOTE_USER}@${REMOTE_HOST}:~/"
+                        host: env.REMOTE_HOST,
+                        user: env.REMOTE_USER,
+                        credentialsId: 'YOUR_SSH_CREDENTIALS_ID	',  
+                    ], command: '''
+                        scp -r ./* ec2-user@50.16.85.89:~/  
+                    '''
 
                     // SSH into EC2 and start the application
                     sshCommand remote: [
-                        host: REMOTE_HOST,
-                        user: REMOTE_USER,
-                        keyFile: sshKeyFile,
+                        host: env.REMOTE_HOST,
+                        user: env.REMOTE_USER,
+                        credentialsId: 'ec2-user',  // Credential ID in Jenkins
                     ], command: '''
                         cd ~/back_pro_sec-main
                         npm run build
@@ -68,6 +62,5 @@ pipeline {
                     '''
                 }
             }
-        }      
     }
 }
