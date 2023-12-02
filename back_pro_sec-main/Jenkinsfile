@@ -54,16 +54,19 @@ pipeline {
                     sh """
                         ssh -o StrictHostKeyChecking=no -i back_pro_sec-main/servless.pem ec2-user@50.16.85.89 '
                             cd ~/back_pro_sec-main &&
+                            && rm -rf node_modules &&
                             npm install &&
                             npm run build &&
                             npm install pm2 -g &&
-                            pm2 start index.js --name my-app'
+                            pm2 start'
                         
                         ssh -o StrictHostKeyChecking=no -i back_pro_sec-main/servless.pem ec2-user@50.16.85.89 '
                             cd ~/front_proj_sec1-main &&
+                            && rm -rf node_modules &&
                             npm install &&
                             npm run build &&
-                            pm2 start index.js --name my-front-app'
+                            npm install pm2 -g &&
+                            pm2 start
                     """
                 }
             }
