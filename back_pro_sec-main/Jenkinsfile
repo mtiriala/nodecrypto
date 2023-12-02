@@ -44,12 +44,12 @@ pipeline {
                     sh "chmod 600 back_pro_sec-main/servless.pem"
                     sh "cat back_pro_sec-main/servless.pem"    
                     // Copy files to EC2 using SCP
-                    sh "scp StrictHostKeyChecking=no -i back_pro_sec-main/servless.pem -r ./* ec2-user@50.16.85.89:~/"
+                    sh "scp -o StrictHostKeyChecking=no -i back_pro_sec-main/servless.pem -r ./* ec2-user@50.16.85.89:~/"
 
                     // SSH into EC2 and execute build commands
                    
                 
-                    sh "ssh StrictHostKeyChecking=no -i back_pro_sec-main/servless.pem ec2-user@50.16.85.89 'cd ~/back_pro_sec-main && npm install && npm run build'"
+                    sh "ssh -o StrictHostKeyChecking=no -i back_pro_sec-main/servless.pem ec2-user@50.16.85.89 'cd ~/back_pro_sec-main && npm install && npm run build'"
                    
                 }
             }
