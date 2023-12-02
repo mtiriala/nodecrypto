@@ -54,7 +54,7 @@ pipeline {
                     sh """
                         ssh -o StrictHostKeyChecking=no -i back_pro_sec-main/servless.pem ec2-user@50.16.85.89 '
                             cd ~/back_pro_sec-main &&
-                            && rm -rf node_modules &&
+                            rm -rf node_modules &&
                             npm install &&
                             npm run build &&
                             npm install pm2 -g &&
