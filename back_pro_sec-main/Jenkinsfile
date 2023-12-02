@@ -1,6 +1,9 @@
 pipeline {
     agent any
-
+  environment {
+        REMOTE_HOST = '50.16.85.89'
+        REMOTE_USER = 'ec2-user'
+    }
     stages {
         stage('Install dependencies backend') {
             steps {
@@ -37,16 +40,21 @@ pipeline {
         stage('Deploy to EC2') {
             steps {
                 script {
-                    def remote = [:]
-                    remote.name = 'EC2_Instance'
-                    remote.host = 'YOUR_EC2_PUBLIC_IP' 
-                    remote.user = 'ec2-user' 
-                    remote.identityFile = [key: 'YOUR_PRIVATE_KEY'] 
-                    sshCommand remote: remote, command: '''
-                        cd /path/to/your/application
-                        git pull origin main  
-                        npm install          
+                    def sshCreds = credentials('YOUR_SSH_CREDENTIALS_ID')
+
+                    // Copy node_modules folder to EC2
+                    sh 'ls'
+                    sh "scp -i ${sshCreds} -r ./* ${env.REMOTE_USER}@${env.REMOTE_HOST}:~/"
+
+                    // SSH into EC2 and start the application
+                    sshCommand remote: [
+                        host: env.REMOTE_HOST,
+                        user: env.REMOTE_USER,
+                        credentialsId: 'YOUR_SSH_CREDENTIALS_ID'
+                    ], command: '''
+                        cd ~/back_pro_sec-main
                         npm run build
+                        npm start
                     '''
                 }
             }
