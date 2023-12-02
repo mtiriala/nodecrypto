@@ -5,22 +5,14 @@ pipeline {
 
         stage('Install dependencies backend') {
             steps {
-                sh 'pwd'
-                sh 'ls'
-                sh 'cd back_pro_sec-main'
-                sh 'pwd'
-                sh 'ls'
-                sh 'npm install'
+                sh 'npm install --prefix back_pro_sec-main'
             }
         }
 
         stage('Build backend ') {
             steps {
                 sh 'pwd'
-
-                sh 'cd back_pro_sec-main'
-                sh 'pwd'
-                sh 'npm run build'
+                sh 'npm run build --prefix back_pro_sec-main'
 
             }
         }
@@ -28,17 +20,14 @@ pipeline {
     
         stage('Install Frontend Dependencies') {
             steps {
-
-                sh 'cd front_proj_sec-main'
-                sh 'npm install'
+                sh 'npm install --prefix front_proj_sec1-main'
                 
             }
         }
         
         stage('build frontend '){
             steps {
-                sh 'cd front_proj_sec-main'
-                sh 'npm run build'
+                sh 'npm run build --prefix front_proj_sec1-main'
             }
         }
 
