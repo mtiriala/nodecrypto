@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Install dependencies backend') {
+            steps {
+
+                sh 'npm install'
+            }
+        }
+
+        stage('Build backend ') {
+            steps {
+
+                sh 'npm pack'
+            }
+        }
+
+    
+        stage('Install Frontend Dependencies') {
+            steps {
+
+                sh 'cd front_proj_sec-main'
+                sh 'npm install'
+                
+            }
+        }
+        
+        stage('build frontend '){
+            steps {
+                sh 'cd front_proj_sec-main'
+                sh 'npm run build'
+            }
+        }
+
+    }
+
+}
