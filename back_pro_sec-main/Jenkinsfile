@@ -58,7 +58,7 @@ steps {
                 npm install &&
                 npm run build &&
                 npm install pm2 -g &&
-                pm2 start index.js --name my-app &&
+                pm2 start index.js --name my-app -f &&
                 cd ~/front_proj_sec1-main &&
                 rm -rf node_modules &&
                 npm install &&
