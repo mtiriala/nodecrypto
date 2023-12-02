@@ -3,6 +3,8 @@ pipeline {
   environment {
         REMOTE_HOST = '50.16.85.89'
         REMOTE_USER = 'ec2-user'
+        SSH_CREDENTIALS = credentials('YOUR_SSH_CREDENTIALS_ID')
+
     }
     stages {
         stage('Install dependencies backend') {
@@ -44,7 +46,7 @@ pipeline {
 
                     // Copy node_modules folder to EC2
                     sh 'ls'
-                    sh "scp -i ${sshCreds} -r ./* ${env.REMOTE_USER}@${env.REMOTE_HOST}:~/"
+                    sh "scp -i ${SSH_CREDENTIALS} -r ./* ${env.REMOTE_USER}@${env.REMOTE_HOST}:~/"
 
                     // SSH into EC2 and start the application
                     sshCommand remote: [
