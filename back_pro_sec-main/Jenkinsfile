@@ -6,8 +6,10 @@ pipeline {
         stage('Install dependencies backend') {
             steps {
                 sh 'pwd'
+                sh 'ls'
                 sh 'cd back_pro_sec-main'
                 sh 'pwd'
+                sh 'ls'
                 sh 'npm install'
             }
         }
