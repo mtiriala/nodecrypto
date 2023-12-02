@@ -12,8 +12,9 @@ pipeline {
 
         stage('Build backend ') {
             steps {
+                sh 'cd back_pro_sec-main'
+                sh 'npm run build'
 
-                sh 'npm pack'
             }
         }
 
