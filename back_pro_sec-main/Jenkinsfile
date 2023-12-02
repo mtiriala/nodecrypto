@@ -42,17 +42,24 @@ pipeline {
         stage('Deploy to EC2') {
             steps {
                 script {
-                    def sshCreds = credentials('YOUR_SSH_CREDENTIALS_ID')
+                    def privateKey = env.SSH_PRIVATE_KEY
 
-                    // Copy node_modules folder to EC2
-                    sh 'ls'
-                    sh "scp -i ${SSH_CREDENTIALS} -r ./* ${env.REMOTE_USER}@${env.REMOTE_HOST}:~/"
+                    // Write private key to a temporary file
+                    def sshKeyFile = writeFile file: 'temp_ssh_key', text: privateKey
+                    sh "chmod 600 ${sshKeyFile}"
+
+                    // Copy files to EC2 using SSH key
+                    sshCommand remote: [
+                        host: REMOTE_HOST,
+                        user: REMOTE_USER,
+                        keyFile: sshKeyFile,
+                    ], command: "scp -i ${sshKeyFile} -r ./* ${REMOTE_USER}@${REMOTE_HOST}:~/"
 
                     // SSH into EC2 and start the application
                     sshCommand remote: [
-                        host: env.REMOTE_HOST,
-                        user: env.REMOTE_USER,
-                        credentialsId: 'YOUR_SSH_CREDENTIALS_ID'
+                        host: REMOTE_HOST,
+                        user: REMOTE_USER,
+                        keyFile: sshKeyFile,
                     ], command: '''
                         cd ~/back_pro_sec-main
                         npm run build
@@ -60,6 +67,6 @@ pipeline {
                     '''
                 }
             }
-        }        
+        }      
     }
 }
