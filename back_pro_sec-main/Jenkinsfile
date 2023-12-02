@@ -28,7 +28,9 @@ pipeline {
         
         stage('build frontend') {
             steps {
-                sh 'npm run build --prefix front_proj_sec1-main'
+                dir('front_proj_sec1-main') {
+                    sh 'npm run build'
+                    }
             }
         }
 
