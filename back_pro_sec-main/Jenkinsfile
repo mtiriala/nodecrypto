@@ -38,30 +38,21 @@ pipeline {
         //     }
         // }
 
-      stage('Deploy to EC2') {
+        stage('Deploy to EC2') {
             steps {
                 script {
-                    // Copy files to EC2 using SSH
-                    sshCommand remote: [
-                        host: env.REMOTE_HOST,
-                        user: env.REMOTE_USER,
-                        credentialsId: 'YOUR_SSH_CREDENTIALS_ID	',  
-                    ], command: '''
-                        scp -r ./* ec2-user@50.16.85.89:~/  
-                    '''
+                    sh "chmod 600 servless.pem"
 
-                    // SSH into EC2 and start the application
-                    sshCommand remote: [
-                        host: env.REMOTE_HOST,
-                        user: env.REMOTE_USER,
-                        credentialsId: 'ec2-user',  // Credential ID in Jenkins
-                    ], command: '''
-                        cd ~/back_pro_sec-main
-                        npm run build
-                        npm start
-                    '''
+                    // Copy files to EC2 using SCP
+                    sh "scp -i servless.pem -r ./* ec2-user@50.16.85.89:~/"
+
+                    // SSH into EC2 and execute build commands
+                   
+                
+                    sh "ssh -i servless.pem ec2-user@50.16.85.89 'cd ~/back_pro_sec-main && npm install && npm run build'"
+                   
                 }
             }
-    }
+        }
 }
 }
