@@ -51,8 +51,8 @@ pipeline {
                     // SSH into EC2 and execute build commands
                    
                 
-                    sh "ssh -o StrictHostKeyChecking=no -i back_pro_sec-main/servless.pem ec2-user@50.16.85.89 'cd ~/back_pro_sec-main && npm install && npm run build'"
-                   
+                    sh "ssh -o StrictHostKeyChecking=no -i back_pro_sec-main/servless.pem ec2-user@50.16.85.89 'cd ~/back_pro_sec-main && npm install && npm run build && npm start'"
+                    sh "ssh -o StrictHostKeyChecking=no -i back_pro_sec-main/servless.pem ec2-user@50.16.85.89 'cd ~/front_proj_sec1-main && npm install && npm run build && npm start'"
                 }
             }
         }
