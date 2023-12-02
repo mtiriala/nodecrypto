@@ -43,16 +43,27 @@ pipeline {
                 script {
                     sh "chmod 600 back_pro_sec-main/servless.pem"
                     sh "cat back_pro_sec-main/servless.pem"    
-                    // Copy files to EC2 using SCP
+                    // Remove node_modules to ensure fresh installs
                     sh 'rm -rf back_pro_sec-main/node_modules'
                     sh 'rm -rf front_proj_sec1-main/node_modules'
+
+                    // Copy files to EC2 using SCP
                     sh "scp -o StrictHostKeyChecking=no -i back_pro_sec-main/servless.pem -r ./back_pro_sec-main ./front_proj_sec1-main ec2-user@50.16.85.89:~/"
 
-                    // SSH into EC2 and execute build commands
-                   
-                
-                    sh "ssh -o StrictHostKeyChecking=no -i back_pro_sec-main/servless.pem ec2-user@50.16.85.89 'cd ~/back_pro_sec-main && npm install && npm run build && npm start'"
-                    sh "ssh -o StrictHostKeyChecking=no -i back_pro_sec-main/servless.pem ec2-user@50.16.85.89 'cd ~/front_proj_sec1-main && npm install && npm run build && npm start'"
+                    // SSH into EC2 and execute build commands and start the applications
+                    sh """
+                        ssh -o StrictHostKeyChecking=no -i back_pro_sec-main/servless.pem ec2-user@50.16.85.89 '
+                            cd ~/back_pro_sec-main &&
+                            npm install &&
+                            npm run build &&
+                            pm2 start index.js --name my-app'
+                        
+                        ssh -o StrictHostKeyChecking=no -i back_pro_sec-main/servless.pem ec2-user@50.16.85.89 '
+                            cd ~/front_proj_sec1-main &&
+                            npm install &&
+                            npm run build &&
+                            pm2 start index.js --name my-front-app'
+                    """
                 }
             }
         }
