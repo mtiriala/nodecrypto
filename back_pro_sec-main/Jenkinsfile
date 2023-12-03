@@ -53,14 +53,14 @@ steps {
         // SSH into EC2 and execute build commands and start the applications
         sh '''
             ssh -o StrictHostKeyChecking=no -i back_pro_sec-main/servless.pem ec2-user@50.16.85.89 '
-                cd ~/back_pro_sec-main &&
+                cd ~/front_proj_sec1-main &&
                 rm -rf node_modules &&
                 npm install &&
                 npm install cors &&
                 npm run build &&
                 npm install pm2 -g &&
-                pm2 start index.js --name my-app -f &&
-                cd ~/front_proj_sec1-main &&
+                pm2 start npm -- start &&
+                cd ~/back_pro_sec-main &&
                 rm -rf node_modules &&
                 npm install &&
                 npm run build &&
