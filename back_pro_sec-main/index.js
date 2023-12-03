@@ -6,7 +6,10 @@ const bodyParser = require('body-parser');
 const db = require('./config/dbConn');
 const credentials = require('./middleware/credentials');
 const cookieParser = require('cookie-parser');
-const corsOptions = require('./config/corsOptions');
+const corsOptions = {
+    origin: '*',
+    optionsSuccessStatus: 200
+};
 
 const PORT = process.env.PORT || 3000;
 
