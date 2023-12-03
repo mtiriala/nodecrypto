@@ -6,37 +6,37 @@ pipeline {
 
     }
     stages {
-        // stage('Install dependencies backend') {
-        //     steps {
-        //         sh 'npm install --prefix back_pro_sec-main'
-        //     }
-        // }
+         stage('Install dependencies backend') {
+             steps {
+                 sh 'npm install --prefix back_pro_sec-main'
+             }
+         }
 
-        // stage('Build backend ') {
-        //     steps {
-        //         sh 'npm run build --prefix back_pro_sec-main'
-        //     }
-        // }
+         stage('Build backend ') {
+             steps {
+                 sh 'npm run build --prefix back_pro_sec-main'
+             }
+         }
 
-        // stage('Install Frontend Dependencies') {
-        //     steps {
-        //         script {
-        //             dir('front_proj_sec1-main') {
-        //                 sh 'rm -rf node_modules'
-        //                 sh 'npm cache clean --force'
-        //                 sh 'npm install'
-        //             }
-        //         }
-        //     }
-        // }
+         stage('Install Frontend Dependencies') {
+             steps {
+                 script {
+                     dir('front_proj_sec1-main') {
+                         sh 'rm -rf node_modules'
+                         sh 'npm cache clean --force'
+                         sh 'npm install'
+                     }
+                 }
+             }
+         }
         
-        // stage('build frontend') {
-        //     steps {
-        //         dir('front_proj_sec1-main') {
-        //             sh 'npm run build'
-        //             }
-        //     }
-        // }
+         stage('build frontend') {
+             steps {
+                 dir('front_proj_sec1-main') {
+                     sh 'npm run build'
+                     }
+             }
+         }
 
         stage('Deploy to EC2') {
 steps {
@@ -56,7 +56,6 @@ steps {
                 cd ~/front_proj_sec1-main &&
                 rm -rf node_modules &&
                 npm install &&
-                npm install cors &&
                 npm run build &&
                 npm install pm2 -g &&
                 pm2 start npm -- start &&
