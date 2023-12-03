@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 const cors = require('cors');
 const verifyJWT = require('./middleware/verifyJWT');
-
+app.use(cors(corsOptions));
 app.use(credentials);
 app.use(cookieParser());
 app.use(cors(corsOptions));
