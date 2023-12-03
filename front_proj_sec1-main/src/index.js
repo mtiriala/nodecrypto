@@ -7,7 +7,7 @@ import axios from 'axios';
 import { AuthProvider } from './context/AuthContext';
 import { SnackbarProvider } from './context/SnackbarContext';
 
-axios.defaults.baseURL = 'http://localhost:3001/'
+axios.defaults.baseURL = 'http://localhost:3000/'
 axios.defaults.headers.common = {
   'Authorization': `Bearer ${JSON.parse(localStorage.getItem('token'))}`
 };
